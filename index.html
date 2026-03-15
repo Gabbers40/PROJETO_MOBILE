@@ -2,42 +2,55 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora</title>
-    <link rel="stylesheet" href="Calculadora.css">
+    <link href=Calculadora.css rel = stylesheet>
 </head>
-
 <body>
-
-<form name="form1" class="calci">
-    <input type="text" id="display" readonly>
-
-    <div class="teclado">
-        <button type="button" class="button" data-value="7">7</button>
-        <button type="button" class="button" data-value="8">8</button>
-        <button type="button" class="button" data-value="9">9</button>
-
-        <button type="button" class="operator" data-value="+">+</button>
-
-        <button type="button" class="button" data-value="4">4</button>
-        <button type="button" class="button" data-value="5">5</button>
-        <button type="button" class="button" data-value="6">6</button>
-
-        <button type="button" class="operator" data-value="-">-</button>
-
-        <button type="button" class="button" data-value="1">1</button>
-        <button type="button" class="button" data-value="2">2</button>
-        <button type="button" class="button" data-value="3">3</button>
-
-        <button type="button" class="operator" data-value="*">*</button>
-
-        <button type="button" class="button" data-value="0">0</button>
-        <button type="button" class="button" data-value=".">.</button>
-
-        <button type="button" id="clear" class="operator">C</button>
-        <button type="button" id="equals" class="operator">=</button>
+    <div class = "body">
+        <div class = "container">
+            <div class = "header-container">
+                <h1 id="toast">Calculadora</h1>
+            </div>
+            <div class="calci">
+                <div class = "primeira">
+                    <input type="text" name="resultado" id="result" placeholder="Resultado" readonly />
+                    <input type="button" value="C" onclick="res.value=''" id="clear-button" />
+                </div>
+                <div class="segunda">
+                    <input type="button" value="1" onclick="livescreen(1)"/>
+                    <input type="button" value="2" onclick="livescreen(2)"/>
+                    <input type="button" value="3" onclick="livescreen(3)"/>
+                    <input type="button" value="+" onclick="livescreen('+')"/>
+                </div>
+                <div class = "terceira">
+                    <input type="button" value="4" onclick="livescreen(4)"/>
+                    <input type="button" value="5" onclick="livescreen(5)"/>
+                    <input type="button" value="6" onclick="livescreen(6)"/>
+                    <input type="button" value="-" onclick="livescreen('-')"/>
+                </div>
+                <div class = "quarta">
+                    <input type="button" value="7" onclick="livescreen(7)"/>
+                    <input type="button" value="8" onclick="livescreen(8)"/>
+                    <input type="button" value="9" onclick="livescreen(9)"/>
+                    <input type="button" value="*" onclick="livescreen('*')"/>
+                </div>
+                <div class = "quinta">
+                    <input type="button" value="/" onclick="livescreen('/')"/>
+                    <input type="button" value="0" onclick="livescreen(0)"/>
+                    <input type="button" value="." onclick="livescreen('.')"/>
+                    <input type="button" value="=" onclick="calculate()"/>
+                </div>
+                <div class = "sexta">
+                    <input type="button" value="," onclick="livescreen(',')"/>
+                    <input type = "button" value="M" onclick="calcularmedia()"/>
+                    <input type = "button" value="B" onclick="calcularBhaskara()"/>
+                    <input type = "button" value="P" onclick="calcularParouImpar()"/>
+                </div>
+            </div>
+        </div>
     </div>
-</form>
-
-<script src="script.js"></script>
+    <script src =script.js defer>
+    </script>
 </body>
 </html>
