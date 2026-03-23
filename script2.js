@@ -1,43 +1,56 @@
-function calcular(){
+function calcularPagamento(){
 
-let valor = Number(document.getElementById("valor").value);
+    let total = 0;
 
-let parcelas = Number(document.getElementById("parcelas").value);
+    let produtos = document.querySelectorAll(".quantidade");
 
-let pagamento = document.querySelector('input[name="pagamento"]:checked').value;
+    for(let i = 0; i < produtos.length; i++){
 
-let resultado = document.getElementById("resultado");
+        let qtd = Number(produtos[i].value);
+        let preco = Number(produtos[i].dataset.preco);
 
-if(pagamento == "avista"){
+        total += qtd * preco;
 
-    let desconto = valor * 0.085;
+    }
 
-    let total = valor - desconto;
+    let opcao = document.querySelector('input[name="pagamento"]:checked');
 
-    resultado.innerHTML = "Total com desconto: R$ " + total.toFixed(2);
+    let resultado = document.getElementById("resultado");
 
-}
-else{
-
-    let taxa = valor * 0.06;
-
-    let taxaParcelas = 6.90 * parcelas;
-
-    let total = valor + taxa + taxaParcelas;
-
-    let valorParcela = total / parcelas;
-
-    if(valorParcela < 10){
-
-        resultado.innerHTML = "Parcelas menores que R$10 não são permitidas";
-
+    if(!opcao){
+        resultado.innerHTML = "Escolha uma forma de pagamento";
         return;
     }
 
-    resultado.innerHTML = 
-    "Total: R$ " + total.toFixed(2) + 
-    "<br>Parcelas: " + parcelas +
-    "<br>Valor da parcela: R$ " + valorParcela.toFixed(2);
-}
+    if(opcao.value === "avista"){
+
+        let desconto = total * 0.085;
+        let totalFinal = total - desconto;
+
+        resultado.innerHTML =
+        "Total: R$ " + totalFinal.toFixed(2);
+
+    }
+    else{
+
+        let parcelas = Number(document.getElementById("parcelas").value);
+
+        let taxa = total * 0.06;
+        let taxaParcelas = 6.90 * parcelas;
+
+        let totalFinal = total + taxa + taxaParcelas;
+
+        let valorParcela = totalFinal / parcelas;
+
+        if(valorParcela < 10){
+            resultado.innerHTML = "Parcelas menores que R$10 não permitidas";
+            return;
+        }
+
+        resultado.innerHTML =
+        "Total: R$ " + totalFinal.toFixed(2) +
+        "<br>" + parcelas + "x de R$ " + valorParcela.toFixed(2);
+
+    }
 
 }
