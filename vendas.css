@@ -1,0 +1,29 @@
+.wrap{
+  height: auto;
+  width:100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: grey
+}
+
+.Pcontainer{
+  width: 350px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 40px;
+}
+.produtos , .preços{
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+  gap: 10px;
+}
+h3{
+  margin-bottom: 10px;
+  color: black;
+  font-weight: normal;
+}
+
+
