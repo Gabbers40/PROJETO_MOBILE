@@ -13,41 +13,41 @@
             <div class = "produtos">
                 <h1> Produtos: </h1>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Camisa Regata
+                    <input type="checkbox" name="teste" id="teste" value="19,90" onchange="verificar()"/> Camisa Regata
                 </label>
                 
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Camisa Social
+                    <input type="checkbox" name="teste" id="teste" value= "59,90" onchange="verificar()"/> Camisa Social
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Blusa
+                    <input type="checkbox" name="teste" id="teste" value= "119,90" onchange="verificar()"/> Blusa
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Pullover
+                    <input type="checkbox" name="teste" id="teste" value= "39,90" onchange="verificar()"/> Pullover
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Sapato
+                    <input type="checkbox" name="teste" id="teste" value= "99,90" onchange="verificar()"/> Sapato
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Calça
+                    <input type="checkbox" name="teste" id="teste" value= "38,90" onchange="verificar()"/> Calça
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Meias
+                    <input type="checkbox" name="teste" id="teste" value= "9,90" onchange="verificar()"/> Meias
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Luvas
+                    <input type="checkbox" name="teste" id="teste" value="24,90" onchange="verificar()"/> Luvas
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Jaqueta
+                    <input type="checkbox" name="teste" id="teste" value="329,90" onchange="verificar()"/> Jaqueta
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Bermuda
+                    <input type="checkbox" name="teste" id="teste" value="69,90" onchange="verificar()"/> Bermuda
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Chinelo
+                    <input type="checkbox" name="teste" id="teste" value="14,90" onchange="verificar()"/> Chinelo
                 </label>
                 <label>
-                    <input type="checkbox" name="teste" id="teste" onchange="verificar()"/> Boné
+                    <input type="checkbox" name="teste" id="teste" value="6,90" onchange="verificar()"/> Boné
                 </label>
             </div>
             <div class = preços>
@@ -77,8 +77,81 @@
                     <br>
                     6,90
                 </p>
+            </div>
+            <div class = "quantidade">
+                <h4>Quantidade:</h4>
+                    <label>
+                    
+                        <input type="number" class="quantidade" data-nome="Camisa" data-preco="19.90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                        
+                        <input type="number" class="quantidade" data-nome="Camisa S" data-preco="59,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                
+                        <input type="number" class="quantidade" data-nome="Blusa" data-preco="119.90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                    
+                        <input type="number" class="quantidade" data-nome="Pullove" data-preco="39,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                    
+                        <input type="number" class="quantidade" data-nome="Sapato" data-preco="99,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                    
+                        <input type="number" class="quantidade" data-nome="Calça" data-preco="38,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                        
+                        <input type="number" class="quantidade" data-nome="Meias" data-preco="9.90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                        
+                        <input type="number" class="quantidade" data-nome="Luvas" data-preco="24,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                        
+                        <input type="number" class="quantidade" data-nome="Jaqueta" data-preco="329,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                        
+                        <input type="number" class="quantidade" data-nome="Bermuda" data-preco="69,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                        <input type="number" class="quantidade" data-nome="Chinelo" data-preco="14,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+                    <label>
+                        <input type="number" class="quantidade" data-nome="Boné" data-preco="6,90" min="0" value="0" onchange="atualizarCarrinho()">
+                    </label>
+            </div>
+            <div class = "pagamento">
+                <label>
+                 <input type="radio" name="pagamento" value="a vista">
+                 Á Vista
+                </label>
+                <br> 
+                <label>
+                 <input type="radio" name="pagamento" value="Parcelado">
+                 Parcelado
+                </label>
+                <br>
+                <label>Parcelas:</label>
+
+                <select id="parcelas">
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="5">5x</option>
+                </select>
+                <br>
+                <button onclick="calcularPagamento()">Finalizar compra</button>
+                <p id="resultado"></p>
             </div>  
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
