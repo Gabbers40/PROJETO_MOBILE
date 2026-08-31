@@ -1,0 +1,145 @@
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TextInput,
+  FlatList,
+  Platform,
+  StatusBar
+} from 'react-native';
+import * as ScreenOrientation from 'expo-screen-orientation';
+
+export default function Lista4() {
+  const [mode, setMode] = useState<'portrait' | 'landscape'>('portrait');
+  const [inputText, setInputText] = useState('');
+  const [names, setNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    readOrientation();
+
+    const subscription = ScreenOrientation.addOrientationChangeListener(
+      ({ orientationInfo }) => {
+        handleOrientationChange(orientationInfo.orientation);
+      }
+    );
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(subscription);
+    };
+  }, []);
+
+  const handleOrientationChange = (orientation: ScreenOrientation.Orientation) => {
+    if (
+      orientation === ScreenOrientation.Orientation.PORTRAIT_UP ||
+      orientation === ScreenOrientation.Orientation.PORTRAIT_DOWN
+    ) {
+      setMode('portrait');
+    } else if (
+      orientation === ScreenOrientation.Orientation.LANDSCAPE_LEFT ||
+      orientation === ScreenOrientation.Orientation.LANDSCAPE_RIGHT
+    ) {
+      setMode('landscape');
+    }
+  };
+
+  const readOrientation = async () => {
+    const orientation = await ScreenOrientation.getOrientationAsync();
+    handleOrientationChange(orientation);
+  };
+
+  const handleAddName = () => {
+    if (inputText.trim() !== '') {
+      setNames((prev) => [...prev, inputText.trim()]);
+      setInputText('');
+    }
+  };
+
+  const isPortrait = mode === 'portrait';
+
+  return (
+    <SafeAreaView
+      style={[
+        styles.container,
+        isPortrait ? styles.portraitBackground : styles.landscapeBackground,
+        { flexDirection: isPortrait ? 'column' : 'row' }
+      ]}
+    >
+      <View style={styles.topBar}>
+        <Text style={styles.headerTitle}>Exercício 5</Text>
+      </View>
+
+      <View style={styles.contentArea}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nome completo"
+          value={inputText}
+          onChangeText={setInputText}
+          onSubmitEditing={handleAddName}
+          returnKeyType="done"
+        />
+
+        <FlatList
+          data={names}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Text style={styles.listItem}>{item}</Text>
+          )}
+          style={styles.list}
+        />
+      </View>
+
+      <View style={styles.bottomArea} />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  portraitBackground: {
+    backgroundColor: '#FFA07A',
+  },
+  landscapeBackground: {
+    backgroundColor: '#FFF8DC',
+  },
+  topBar: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  contentArea: {
+    flex: 1,
+    padding: 15,
+  },
+  input: {
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 4,
+    marginBottom: 15,
+  },
+  list: {
+    flex: 1,
+  },
+  listItem: {
+    fontSize: 16,
+    color: '#000',
+    marginVertical: 4,
+  },
+  bottomArea: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 99, 71, 0.4)',
+  },
+});
