@@ -1,0 +1,240 @@
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  FlatList,
+  Linking,
+  Alert,
+  SafeAreaView,
+  StatusBar,
+  Platform
+} from 'react-native';
+import * as Contacts from 'expo-contacts';
+import * as ImagePicker from 'expo-image-picker';
+import { MaterialIcons } from '@expo/vector-icons';
+
+export default function Lista3() {
+  const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
+  const [hasContactPermission, setHasContactPermission] = useState<boolean | null>(null);
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      setHasContactPermission(status === 'granted');
+      if (status === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.FirstName, Contacts.Fields.PhoneNumbers],
+        });
+        if (data.length > 0) {
+          const filtered = data.filter(
+            (c) => c.name && c.name.toUpperCase().startsWith('C')
+          );
+          setContacts(filtered);
+        }
+      }
+    })();
+  }, []);
+
+  const openYouTube = () => {
+    Linking.openURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+  };
+
+  const openDialer = () => {
+    Linking.openURL('tel:123456789');
+  };
+
+  const openInstagram = () => {
+    Linking.openURL('https://www.instagram.com/etecsjc195');
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImages((prev) => [...prev, result.assets[0].uri]);
+    }
+  };
+
+  const takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permissão necessária', 'Acesso à câmera é obrigatório.');
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImages((prev) => [...prev, result.assets[0].uri]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.leftHeader}>
+          <TouchableOpacity style={styles.actionBtn} onPress={openYouTube}>
+            <Text style={styles.btnText}>YouTube</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtn} onPress={openDialer}>
+            <Text style={styles.btnText}>Ligar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtn} onPress={openInstagram}>
+            <Text style={styles.btnText}>Insta</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.rightHeader}>
+          <TouchableOpacity onPress={pickImage} style={styles.iconBtn}>
+            <MaterialIcons name="photo" size={28} color="deepskyblue" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={takePhoto} style={styles.iconBtn}>
+            <MaterialIcons name="photo-camera" size={28} color="deepskyblue" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.galleryContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {images.map((uri, index) => (
+            <View key={index} style={styles.imageWrapper}>
+              <Image source={{ uri }} style={styles.image} />
+              <TouchableOpacity
+                style={styles.deleteBtn}
+                onPress={() => removeImage(index)}
+              >
+                <MaterialIcons name="close" size={20} color="#fff" />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+
+      <View style={styles.contactsContainer}>
+        <Text style={styles.sectionTitle}>Contatos com 'C' (Primeiro Nome):</Text>
+        {hasContactPermission === false ? (
+          <Text style={styles.errorText}>Sem acesso aos contatos</Text>
+        ) : (
+          <FlatList
+            data={contacts}
+            keyExtractor={(item) => item.id || Math.random().toString()}
+            renderItem={({ item }) => (
+              <View style={styles.contactRow}>
+                <Text style={styles.contactName}>{item.firstName || item.name}</Text>
+                {item.phoneNumbers &&
+                  item.phoneNumbers.map((phone, idx) => (
+                    <Text key={idx} style={styles.contactNumber}>
+                      {phone.number}
+                    </Text>
+                  ))}
+              </View>
+            )}
+          />
+        )}
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#222',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#444',
+  },
+  leftHeader: {
+    flexDirection: 'row',
+    gap: 5,
+  },
+  rightHeader: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  actionBtn: {
+    backgroundColor: '#333',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 4,
+  },
+  btnText: {
+    color: '#fff',
+    fontSize: 12,
+  },
+  iconBtn: {
+    padding: 4,
+  },
+  galleryContainer: {
+    height: 120,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#444',
+  },
+  imageWrapper: {
+    position: 'relative',
+    marginLeft: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+  },
+  deleteBtn: {
+    position: 'absolute',
+    top: 2,
+    left: 2,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 12,
+    padding: 2,
+  },
+  contactsContainer: {
+    flex: 1,
+    padding: 10,
+  },
+  sectionTitle: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  contactRow: {
+    width: '100%',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  contactName: {
+    color: 'yellow',
+    fontSize: 16,
+  },
+  contactNumber: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  errorText: {
+    color: '#ff6666',
+  },
+});
