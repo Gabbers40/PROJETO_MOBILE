@@ -1,0 +1,16 @@
+import React from "react";
+import { SafeAreaView, Text, View } from "react-native";
+import styles from "./styles";
+
+const Favorites: React.FC = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Meus Favoritos</Text>
+        <Text style={styles.text}>Lista de filmes marcados como favoritos.</Text>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default Favorites;
