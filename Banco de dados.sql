@@ -1,4 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   nome VARCHAR(120) NOT NULL,
@@ -6,10 +7,12 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   foto_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
 CREATE TABLE IF NOT EXISTS public.genres (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(60) UNIQUE NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS public.movies (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(150) NOT NULL,
@@ -27,6 +30,7 @@ CREATE TABLE IF NOT EXISTS public.movies (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
 CREATE TABLE IF NOT EXISTS public.ratings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -35,6 +39,7 @@ CREATE TABLE IF NOT EXISTS public.ratings (
   comment TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
 CREATE TABLE IF NOT EXISTS public.favorites (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -42,6 +47,7 @@ CREATE TABLE IF NOT EXISTS public.favorites (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   CONSTRAINT unique_user_movie_favorite UNIQUE (user_id, movie_id)
 );
+
 INSERT INTO public.genres (nome)
 VALUES
   ('Ação'),
@@ -67,61 +73,81 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE public.genres ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE public.movies ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE public.ratings ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE public.favorites ENABLE ROW LEVEL SECURITY;
+
 CREATE POLICY "Usuários podem visualizar todos os perfis"
   ON public.profiles FOR SELECT
   USING (true);
+
 CREATE POLICY "Usuários podem atualizar seu próprio perfil"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
+
 CREATE POLICY "Todos os usuários autenticados podem visualizar gêneros"
   ON public.genres FOR SELECT
   TO authenticated
   USING (true);
+
 CREATE POLICY "Usuários podem visualizar apenas seus próprios filmes"
   ON public.movies FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem inserir seus próprios filmes"
   ON public.movies FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem atualizar seus próprios filmes"
   ON public.movies FOR UPDATE
   TO authenticated
   USING (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem deletar seus próprios filmes"
   ON public.movies FOR DELETE
   TO authenticated
   USING (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem visualizar suas próprias avaliações"
   ON public.ratings FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem inserir suas próprias avaliações"
   ON public.ratings FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem deletar suas próprias avaliações"
   ON public.ratings FOR DELETE
   TO authenticated
   USING (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem visualizar seus próprios favoritos"
   ON public.favorites FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem inserir seus próprios favoritos"
   ON public.favorites FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
+
 CREATE POLICY "Usuários podem deletar seus próprios favoritos"
   ON public.favorites FOR DELETE
   TO authenticated
